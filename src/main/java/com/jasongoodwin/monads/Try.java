@@ -13,16 +13,25 @@ interface TrySupplier<T>{
     public T get() throws Exception;
 }
 
+/**
+ * Monadic Try type.
+ * Represents a result type that could have succeeded with type T or failed with an Exception.
+ * @param <T>
+ */
+
 abstract class Try<T>{
+
+    protected Try(){
+    }
 
     public static <U> Try<U> ofFailable(TrySupplier<U> f){
         Objects.requireNonNull(f);
 
         try{
             U y = f.get();
-            return new Success<U>(y);
+            return new Success<>(y);
         }catch (Exception e){
-            return new Failure<U>(e);
+            return new Failure<>(e);
         }
     }
 
@@ -30,6 +39,7 @@ abstract class Try<T>{
     public abstract <U> Try<U> flatMap(Function<? super T, Try<U>> mapper);
 
     public abstract T orElse(T value);
+    public abstract Try<T> orElseTry(TrySupplier<T> f);
     public abstract T get() throws Exception;
 
     public abstract boolean isSuccess();
@@ -58,6 +68,11 @@ class Success<T> extends Try<T>{
     @Override
     public T orElse(T value) {
         return this.value;
+    }
+
+    @Override
+    public Try<T> orElseTry(TrySupplier<T> f) {
+        return this;
     }
 
     @Override
@@ -107,6 +122,11 @@ class Failure<T> extends Try<T>{
     @Override
     public T orElse(T value) {
         return value;
+    }
+
+    @Override
+    public Try<T> orElseTry(TrySupplier<T> f) {
+        return Try.ofFailable(f);
     }
 
     @Override

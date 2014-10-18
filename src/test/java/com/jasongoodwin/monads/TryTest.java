@@ -40,6 +40,13 @@ public class TryTest {
     }
 
     @Test
+    public void itShouldOrElseTryOnSuccess() throws Exception {
+        Try<String> t = Try.ofFailable(() -> "hey").orElseTry(() -> "jude");
+
+        assertEquals("hey", t.get());
+    }
+
+    @Test
     public void itShouldBeFailureOnFailure(){
         Try<String> t = Try.ofFailable(() -> {
             throw new Exception("e");
@@ -82,5 +89,13 @@ public class TryTest {
         assertEquals("jude", t);
     }
 
+    @Test
+    public void itShouldOrElseTryOnFailure() throws Exception {
+        Try<String> t = Try.<String>ofFailable(() -> {
+            throw new IllegalArgumentException("e");
+        }).orElseTry(() -> "jude");
+
+        assertEquals("jude", t.get());
+    }
 }
 
