@@ -3,15 +3,6 @@ package com.jasongoodwin.monads;
 import java.util.Objects;
 import java.util.function.Function;
 
-/**
- * This is similar to the Java Supplier function type.
- * It has a checked exception on it to allow it to be used in lambda expressions on the Try monad.
- * @param <T>
- */
-
-interface TrySupplier<T>{
-    public T get() throws Exception;
-}
 
 /**
  * Monadic Try type.
@@ -19,7 +10,7 @@ interface TrySupplier<T>{
  * @param <T>
  */
 
-abstract class Try<T>{
+public abstract class Try<T>{
 
     protected Try(){
     }
