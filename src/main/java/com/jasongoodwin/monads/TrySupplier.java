@@ -7,5 +7,5 @@ package com.jasongoodwin.monads;
  */
 
 public interface TrySupplier<T>{
-    public T get() throws Throwable;
+    public T get() throws Exception;
 }
