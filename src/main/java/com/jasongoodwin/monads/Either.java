@@ -1,7 +1,8 @@
 package com.jasongoodwin.monads;
 
 /**
- * Todo implement projections
+ * Todo implement projections.
+ * This is not yet usable.
  * @param <L>
  * @param <R>
  */

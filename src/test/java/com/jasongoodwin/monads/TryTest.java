@@ -6,19 +6,19 @@ import static org.junit.Assert.*;
 
 public class TryTest {
     @Test
-    public void itShouldBeSuccessOnSuccess() throws Exception{
+    public void itShouldBeSuccessOnSuccess() throws Throwable{
         Try<String> t = Try.ofFailable(() -> "hey");
         assertTrue(t.isSuccess());
     }
 
     @Test
-    public void itShouldHoldValueOnSuccess() throws Exception{
+    public void itShouldHoldValueOnSuccess() throws Throwable{
         Try<String> t = Try.ofFailable(() -> "hey");
         assertEquals("hey", t.get());
     }
 
     @Test
-    public void itShouldMapOnSuccess() throws Exception{
+    public void itShouldMapOnSuccess() throws Throwable{
         Try<String> t = Try.ofFailable(() -> "hey");
         Try<Integer> intT = t.map((x) -> 5);
         intT.get();
@@ -26,7 +26,7 @@ public class TryTest {
     }
 
     @Test
-    public void itShouldFlatMapOnSuccess() throws Exception {
+    public void itShouldFlatMapOnSuccess() throws Throwable {
         Try<String> t = Try.ofFailable(() -> "hey");
         Try<Integer> intT = t.flatMap((x) -> Try.ofFailable(() -> 5));
         intT.get();
@@ -40,7 +40,23 @@ public class TryTest {
     }
 
     @Test
-    public void itShouldOrElseTryOnSuccess() throws Exception {
+    public void itShouldReturnValueWhenRecoveringOnSuccess() {
+        String t = Try.ofFailable(() -> "hey").recover((e) -> "jude");
+        assertEquals("hey", t);
+    }
+
+
+    @Test
+    public void itShouldReturnValueWhenRecoveringWithOnSuccess() throws Throwable {
+        String t = Try.ofFailable(() -> "hey")
+                .recoverWith((x) ->
+                Try.ofFailable(() -> "Jude")
+                ).get();
+        assertEquals("hey", t);
+    }
+
+    @Test
+    public void itShouldOrElseTryOnSuccess() throws Throwable {
         Try<String> t = Try.ofFailable(() -> "hey").orElseTry(() -> "jude");
 
         assertEquals("hey", t.get());
@@ -55,7 +71,7 @@ public class TryTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void itShouldThrowExceptionOnGetOfFailure() throws Exception{
+    public void itShouldThrowExceptionOnGetOfFailure() throws Throwable{
         Try<String> t = Try.ofFailable(() -> {
             throw new IllegalArgumentException("e");
         });
@@ -90,12 +106,34 @@ public class TryTest {
     }
 
     @Test
-    public void itShouldOrElseTryOnFailure() throws Exception {
+    public void itShouldOrElseTryOnFailure() throws Throwable {
         Try<String> t = Try.<String>ofFailable(() -> {
             throw new IllegalArgumentException("e");
         }).orElseTry(() -> "jude");
 
         assertEquals("jude", t.get());
+    }
+
+    @Test
+    public void itShouldReturnRecoverValueWhenRecoveringOnFailure() {
+        String t = Try.ofFailable(() -> "hey")
+                .<String>map((x) -> {
+                    throw new Exception("fail");
+                })
+                .recover((e) -> "jude");
+        assertEquals("jude", t);
+    }
+
+
+    @Test
+    public void itShouldReturnValueWhenRecoveringWithOnFailure() throws Throwable {
+        String t = Try.<String>ofFailable(() -> {
+            throw new Exception("oops");
+        })
+                .recoverWith((x) ->
+                                Try.ofFailable(() -> "Jude")
+                ).get();
+        assertEquals("Jude", t);
     }
 }
 
