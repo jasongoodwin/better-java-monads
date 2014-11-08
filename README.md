@@ -18,7 +18,9 @@ Usage
 The Try api is meant to be similar to the Optional type so has the same functions.
 - map(x) maps the success value x to a new value and type or otherwise passes the Failure forward.
 - flatMap((x) -> f(x)) maps the success value x to a new Try of f(x).
+- recover((t) -> x) will return the success value of the Try in the success case or the value x in the failure case. Exposes the exception.
+- recoverWith((t) -> f(x)) will return the success value of the Try in the success case or a new try of f(x) in the failure case. Exposes the exception.
 - orElse(x) will return the success value of the Try in success case or the value x in failure case.
 - orElseTry(f) will return the success value of the Try in success case or a new Try(f) in the failure case.
 
-See the test for complete examples.
+See the tests for examples of all functionality.
