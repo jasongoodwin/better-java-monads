@@ -135,5 +135,10 @@ public class TryTest {
                 ).get();
         assertEquals("Jude", t);
     }
+
+    @Test
+    public void itShouldHandleComplexChaining() throws Throwable {
+        Try.ofFailable(() -> "1").<Integer>flatMap((x) -> Try.ofFailable(() -> Integer.valueOf(x))).recoverWith((t) -> Try.successful(1));
+    }
 }
 

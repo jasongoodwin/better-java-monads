@@ -1,9 +1,9 @@
 package com.jasongoodwin.monads;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Monadic Try type.
@@ -109,6 +109,8 @@ public abstract class Try<T> {
 
     public abstract boolean isSuccess();
 
+    public abstract Try<T> onFailure(Consumer<Throwable> f);
+
     /**
      * Factory method for failure.
      *
@@ -192,6 +194,13 @@ class Success<T> extends Try<T> {
     public boolean isSuccess() {
         return true;
     }
+
+    @Override
+    public Try<T> onFailure(Consumer<Throwable> f) {
+        return this;
+    }
+
+
 }
 
 
@@ -250,4 +259,12 @@ class Failure<T> extends Try<T> {
     public boolean isSuccess() {
         return false;
     }
+
+    @Override
+    public Try<T> onFailure(Consumer<Throwable> f) {
+        f.accept(e);
+        return this;
+    }
+
+
 }
