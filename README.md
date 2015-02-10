@@ -1,4 +1,4 @@
-better-java-monads
+better-java8-monads
 ==================
 
 I can't help but feel there were some important omissions in the Java8 library.
