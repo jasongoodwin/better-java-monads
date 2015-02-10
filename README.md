@@ -24,6 +24,12 @@ Maven
 	    <version>0.0.1</version>
     </dependency>
 
+Note on Published Artifact
+--------------------------
+
+Currently published version had problems with javadoc so the project was published as a scala project.
+It currently has a scala version ammendment in the name (_2.10). This will be fixed in future versions.
+
 Try
 ===
 
