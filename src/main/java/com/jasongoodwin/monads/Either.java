@@ -12,11 +12,11 @@ public abstract class Either<L, R> {
     }
 
     public static <K, U> Left<K, U> asLeft(K value){
-        return new Left<K, U>(value);
+        return new Left<>(value);
     }
 
     public static <K, U> Right<K, U> asRight(U value){
-        return new Right<K, U>(value);
+        return new Right<>(value);
     }
 
     public abstract Either<R, L> swap();
@@ -34,7 +34,7 @@ class Left<L, R> extends Either<L, R>{
 
     @Override
     public Either<R, L> swap() {
-        return new Right<R, L>(value);
+        return new Right<>(value);
     }
 
     @Override
@@ -58,7 +58,7 @@ class Right<L, R> extends Either<L, R>{
 
     @Override
     public Either<R, L> swap() {
-        return new Left<R, L>(value);
+        return new Left<>(value);
     }
 
     @Override
