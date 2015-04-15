@@ -27,8 +27,7 @@ public abstract class Try<T> {
         Objects.requireNonNull(f);
 
         try {
-            U y = f.get();
-            return Try.successful(y);
+            return Try.successful(f.get());
         } catch (Throwable t) {
             return Try.failure(t);
         }
@@ -112,7 +111,19 @@ public abstract class Try<T> {
 
     public abstract boolean isSuccess();
 
-    public abstract Try<T> onFailure(Consumer<Throwable> f);
+    /**
+     * Performs the provided action, when successful
+     * @param action action to run
+     * @return
+     */
+    public abstract Try<T> onSuccess(Consumer<T> action);
+
+    /**
+     * Performs the provided action, when failed
+     * @param action action to run
+     * @return
+     */
+    public abstract Try<T> onFailure(Consumer<Throwable> action);
 
     /**
      * If a Try is a Success and the predicate holds true, the Success is passed further.
@@ -148,7 +159,7 @@ public abstract class Try<T> {
      * @return a new Success
      */
     public static <U> Try<U> successful(U x) {
-        return new Success<U>(x);
+        return new Success<>(x);
     }
 }
 
@@ -201,7 +212,7 @@ class Success<T> extends Try<T> {
     public <U> Try<U> map(TryMapFunction<? super T, ? extends U> f) {
         Objects.requireNonNull(f);
         try {
-            return new Success<U>(f.apply(value));
+            return new Success<>(f.apply(value));
         } catch (Throwable t) {
             return Try.failure(t);
         }
@@ -213,11 +224,13 @@ class Success<T> extends Try<T> {
     }
 
     @Override
-    public Try<T> onFailure(Consumer<Throwable> f) {
+    public Try<T> onSuccess(Consumer<T> action) {
+        action.accept(value);
         return this;
     }
 
     @Override
+<<<<<<< HEAD
     public Try<T> filter(Predicate<T> p) {
         Objects.requireNonNull(p);
 
@@ -231,6 +244,10 @@ class Success<T> extends Try<T> {
     @Override
     public Optional<T> toOptional() {
         return Optional.ofNullable(value);
+=======
+    public Try<T> onFailure(Consumer<Throwable> action) {
+        return this;
+>>>>>>> 6a6eb6c... New methods + refactor
     }
 }
 
@@ -292,8 +309,7 @@ class Failure<T> extends Try<T> {
     }
 
     @Override
-    public Try<T> onFailure(Consumer<Throwable> f) {
-        f.accept(e);
+    public Try<T> onSuccess(Consumer<T> action) {
         return this;
     }
 
@@ -305,5 +321,11 @@ class Failure<T> extends Try<T> {
     @Override
     public Optional<T> toOptional() {
         return Optional.empty();
+    }
+   
+    @Override 
+    public Try<T> onFailure(Consumer<Throwable> action) {
+        action.accept(e);
+        return this;
     }
 }
