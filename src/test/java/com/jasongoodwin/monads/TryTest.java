@@ -140,5 +140,28 @@ public class TryTest {
     public void itShouldHandleComplexChaining() throws Throwable {
         Try.ofFailable(() -> "1").<Integer>flatMap((x) -> Try.ofFailable(() -> Integer.valueOf(x))).recoverWith((t) -> Try.successful(1));
     }
+
+    @Test
+    public void itShouldPassFailureIfPredicateIsFalse() throws Throwable {
+        Try t1 = Try.ofFailable(() -> {
+            throw new RuntimeException();
+        }).filter(o -> false);
+
+        Try t2 = Try.ofFailable(() -> {
+            throw new RuntimeException();
+        }).filter(o -> true);
+
+        assertEquals(t1.isSuccess(), false);
+        assertEquals(t2.isSuccess(), false);
+    }
+
+    @Test
+    public void isShouldPassSuccessOnlyIfPredicateIsTrue() throws Throwable {
+        Try t1 = Try.<String>ofFailable(() -> "yo mama").filter(s -> s.length() > 0);
+        Try t2 = Try.<String>ofFailable(() -> "yo mama").filter(s -> s.length() < 0);
+
+        assertEquals(t1.isSuccess(), true);
+        assertEquals(t2.isSuccess(), false);
+    }
 }
 

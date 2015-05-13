@@ -1,8 +1,10 @@
 package com.jasongoodwin.monads;
 
+import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
@@ -112,6 +114,14 @@ public abstract class Try<T> {
     public abstract Try<T> onFailure(Consumer<Throwable> f);
 
     /**
+     * If a Try is a Success and the predicate holds true, the Success is passed further.
+     * Otherwise (Failure or predicate doesn't hold), pass Failure.
+     * @param pred predicate applied to the value held by Try
+     * @return For Success, the same success if predicate holds true, otherwise Failure
+     */
+    public abstract Try<T> filter(Predicate<T> pred);
+
+    /**
      * Factory method for failure.
      *
      * @param e
@@ -200,6 +210,17 @@ class Success<T> extends Try<T> {
         return this;
     }
 
+    @Override
+    public Try<T> filter(Predicate<T> p) {
+        Objects.requireNonNull(p);
+
+        if (p.test(value)) {
+            return this;
+        } else {
+            return Try.failure(new NoSuchElementException("Predicate does not match for " + value));
+        }
+    }
+
 
 }
 
@@ -263,6 +284,11 @@ class Failure<T> extends Try<T> {
     @Override
     public Try<T> onFailure(Consumer<Throwable> f) {
         f.accept(e);
+        return this;
+    }
+
+    @Override
+    public Try<T> filter(Predicate<T> pred) {
         return this;
     }
 
