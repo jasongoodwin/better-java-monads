@@ -230,7 +230,6 @@ class Success<T> extends Try<T> {
     }
 
     @Override
-<<<<<<< HEAD
     public Try<T> filter(Predicate<T> p) {
         Objects.requireNonNull(p);
 
@@ -244,10 +243,11 @@ class Success<T> extends Try<T> {
     @Override
     public Optional<T> toOptional() {
         return Optional.ofNullable(value);
-=======
+    }
+
+    @Override
     public Try<T> onFailure(Consumer<Throwable> action) {
         return this;
->>>>>>> 6a6eb6c... New methods + refactor
     }
 }
 
