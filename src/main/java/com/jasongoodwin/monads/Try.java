@@ -2,6 +2,7 @@ package com.jasongoodwin.monads;
 
 import java.util.NoSuchElementException;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -122,6 +123,12 @@ public abstract class Try<T> {
     public abstract Try<T> filter(Predicate<T> pred);
 
     /**
+     * Try contents wrapped in Optional.
+     * @return Optional of T, if Success, Empty if Failure or null value
+     */
+    public abstract Optional<T> toOptional();
+
+    /**
      * Factory method for failure.
      *
      * @param e
@@ -221,7 +228,10 @@ class Success<T> extends Try<T> {
         }
     }
 
-
+    @Override
+    public Optional<T> toOptional() {
+        return Optional.ofNullable(value);
+    }
 }
 
 
@@ -292,5 +302,8 @@ class Failure<T> extends Try<T> {
         return this;
     }
 
-
+    @Override
+    public Optional<T> toOptional() {
+        return Optional.empty();
+    }
 }

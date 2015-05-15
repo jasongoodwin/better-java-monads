@@ -2,6 +2,8 @@ package com.jasongoodwin.monads;
 
 import org.junit.Test;
 
+import java.util.Optional;
+
 import static org.junit.Assert.*;
 
 public class TryTest {
@@ -162,6 +164,24 @@ public class TryTest {
 
         assertEquals(t1.isSuccess(), true);
         assertEquals(t2.isSuccess(), false);
+    }
+
+    @Test
+    public void itShouldReturnEmptyOptionalIfFailureOrNullSuccess() throws Throwable {
+        Optional<String> opt1 = Try.<String>ofFailable(() -> {
+            throw new IllegalArgumentException("Expected exception");
+        }).toOptional();
+        Optional<String> opt2 = Try.<String>ofFailable(() -> null).toOptional();
+
+        assertFalse(opt1.isPresent());
+        assertFalse(opt2.isPresent());
+    }
+
+    @Test
+    public void isShouldReturnTryValueWrappedInOptionalIfNonNullSuccess() throws Throwable {
+        Optional<String> opt1 = Try.<String>ofFailable(() -> "yo mama").toOptional();
+
+        assertTrue(opt1.isPresent());
     }
 }
 
