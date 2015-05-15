@@ -2,8 +2,8 @@ better-java8-monads
 ==================
 
 I can't help but feel there were some important omissions in the Java8 library.
-Stream and Optional are great, but we need to get unimplicit effects like Exceptions out of the code too.
-To make a much more readable code base, I'll try to supply some monads to fill in the gaps.
+Stream and Optional are great, but we need to get unclear effects like Exceptions out of the code too.
+To make a much more readable code base, I'll try to supply some monads to fill in the gaps - especially Try.
 
 Usage
 =====
@@ -21,14 +21,14 @@ Maven
     <dependency>
 	    <groupId>com.jason-goodwin</groupId>
 	    <artifactId>better-monads_2.10</artifactId>
-	    <version>0.0.1</version>
+	    <version>0.1.0</version>
     </dependency>
 
 Note on Published Artifact
 --------------------------
 
 Currently published version had problems with javadoc so the project was published as a scala project.
-It currently has a scala version ammendment in the name (_2.10). This will be fixed in future versions.
+It currently has a scala version amendment in the name (_2.10). This will be fixed in future versions.
 
 Try
 ===
