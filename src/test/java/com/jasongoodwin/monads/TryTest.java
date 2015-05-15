@@ -2,6 +2,8 @@ package com.jasongoodwin.monads;
 
 import org.junit.Test;
 
+import java.util.Optional;
+
 import static org.junit.Assert.*;
 
 public class TryTest {
@@ -139,6 +141,47 @@ public class TryTest {
     @Test
     public void itShouldHandleComplexChaining() throws Throwable {
         Try.ofFailable(() -> "1").<Integer>flatMap((x) -> Try.ofFailable(() -> Integer.valueOf(x))).recoverWith((t) -> Try.successful(1));
+    }
+
+    @Test
+    public void itShouldPassFailureIfPredicateIsFalse() throws Throwable {
+        Try t1 = Try.ofFailable(() -> {
+            throw new RuntimeException();
+        }).filter(o -> false);
+
+        Try t2 = Try.ofFailable(() -> {
+            throw new RuntimeException();
+        }).filter(o -> true);
+
+        assertEquals(t1.isSuccess(), false);
+        assertEquals(t2.isSuccess(), false);
+    }
+
+    @Test
+    public void isShouldPassSuccessOnlyIfPredicateIsTrue() throws Throwable {
+        Try t1 = Try.<String>ofFailable(() -> "yo mama").filter(s -> s.length() > 0);
+        Try t2 = Try.<String>ofFailable(() -> "yo mama").filter(s -> s.length() < 0);
+
+        assertEquals(t1.isSuccess(), true);
+        assertEquals(t2.isSuccess(), false);
+    }
+
+    @Test
+    public void itShouldReturnEmptyOptionalIfFailureOrNullSuccess() throws Throwable {
+        Optional<String> opt1 = Try.<String>ofFailable(() -> {
+            throw new IllegalArgumentException("Expected exception");
+        }).toOptional();
+        Optional<String> opt2 = Try.<String>ofFailable(() -> null).toOptional();
+
+        assertFalse(opt1.isPresent());
+        assertFalse(opt2.isPresent());
+    }
+
+    @Test
+    public void isShouldReturnTryValueWrappedInOptionalIfNonNullSuccess() throws Throwable {
+        Optional<String> opt1 = Try.<String>ofFailable(() -> "yo mama").toOptional();
+
+        assertTrue(opt1.isPresent());
     }
 }
 
