@@ -13,7 +13,7 @@ Import into your project:
 SBT
 ---
 
-    "com.jason-goodwin" % "better-monads" % "0.0.1"
+    "com.jason-goodwin" % "better-monads" % "0.1.0"
 
 Maven
 -----
