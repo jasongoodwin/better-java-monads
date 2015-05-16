@@ -4,10 +4,6 @@ organization := "com.jason-goodwin"
 
 libraryDependencies += "junit" % "junit" % "4.11" % "test"
 
-sources in (Compile,doc) := Seq.empty
-
-publishArtifact in (Compile, packageDoc) := false
-
 publishMavenStyle := true
 
 publishTo := {
@@ -45,5 +41,5 @@ pomExtra := (
 
 credentials += Credentials("Sonatype Nexus Repository Manager",
                            "oss.sonatype.org",
-                           "putInCreds...",
-                           "blarg")
+                           "user",
+                           "pass")

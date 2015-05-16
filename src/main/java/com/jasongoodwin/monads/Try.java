@@ -37,48 +37,48 @@ public abstract class Try<T> {
      * Transform success or pass on failure.
      * Takes an optional type parameter of the new type.
      * You need to be specific about the new type if changing type
-     * <p>
-     * Try.ofFailable(() -> "1").<Integer>map((x) -> Integer.valueOf(x))
+     *
+     * Try.ofFailable(() -&gt; "1").&lt;Integer&gt;map((x) -&gt; Integer.valueOf(x))
      *
      * @param f   function to apply to successful value.
      * @param <U> new type (optional)
-     * @return Success<U> or Failure<U>
+     * @return Success&lt;U&gt; or Failure&lt;U&gt;
      */
 
     public abstract <U> Try<U> map(TryMapFunction<? super T, ? extends U> f);
 
     /**
-     * Transform success or pass on failure, taking a Try<U> as the result.
+     * Transform success or pass on failure, taking a Try&lt;U&gt; as the result.
      * Takes an optional type parameter of the new type.
      * You need to be specific about the new type if changing type.
-     * <p>
-     * Try.ofFailable(() -> "1").<Integer>flatMap((x) -> Try.ofFailable(() ->Integer.valueOf(x)))
+     *
+     * Try.ofFailable(() -&gt; "1").&lt;Integer&gt;flatMap((x) -&gt; Try.ofFailable(() -&gt; Integer.valueOf(x)))
      * returns Integer(1)
      *
      * @param f   function to apply to successful value.
      * @param <U> new type (optional)
-     * @return Success<U> or Failure<U>
+     * @return new composed Try
      */
     public abstract <U> Try<U> flatMap(TryMapFunction<? super T, Try<U>> f);
 
     /**
      * Specifies a result to use in case of failure.
      * Gives access to the exception which can be pattern matched on.
-     * <p>
-     * Try.ofFailable(() -> "not a number")
-     * .<Integer>flatMap((x) -> Try.ofFailable(() ->Integer.valueOf(x)))
-     * .recover((t) -> 1)
+     *
+     * Try.ofFailable(() -&gt; "not a number")
+     * .&lt;Integer&gt;flatMap((x) -&gt; Try.ofFailable(() -&gt;Integer.valueOf(x)))
+     * .recover((t) -&gt; 1)
      * returns Integer(1)
      *
-     * @param f
-     * @return
+     * @param f function to execute on successful result.
+     * @return new composed Try
      */
 
     public abstract T recover(Function<? super Throwable, T> f);
 
     /**
      * Try applying f(t) on the case of failure.
-     * @param f
+     * @param f function that takes throwable and returns result
      * @return a new Try in the case of failure, or the current Success.
      */
     public abstract Try<T> recoverWith(TryMapFunction<? super Throwable, Try<T>> f);
@@ -87,8 +87,8 @@ public abstract class Try<T> {
      * Return a value in the case of a failure.
      * This is similar to recover but does not expose the exception type.
      *
-     * @param value
-     * @return
+     * @param value return the try's value or else the value specified.
+     * @return new composed Try
      */
     public abstract T orElse(T value);
 
@@ -96,15 +96,15 @@ public abstract class Try<T> {
      * Return another try in the case of failure.
      * Like recoverWith but without exposing the exception.
      *
-     * @param f
-     * @return
+     * @param f return the value or the value from the new try.
+     * @return new composed Try
      */
     public abstract Try<T> orElseTry(TrySupplier<T> f);
 
     /**
      * Gets the value on Success or throws the cause of the failure.
      *
-     * @return
+     * @return new composed Try
      * @throws Throwable
      */
     public abstract T get() throws Throwable;
@@ -114,14 +114,14 @@ public abstract class Try<T> {
     /**
      * Performs the provided action, when successful
      * @param action action to run
-     * @return
+     * @return new composed Try
      */
     public abstract Try<T> onSuccess(Consumer<T> action);
 
     /**
      * Performs the provided action, when failed
      * @param action action to run
-     * @return
+     * @return new composed Try
      */
     public abstract Try<T> onFailure(Consumer<Throwable> action);
 
@@ -142,8 +142,8 @@ public abstract class Try<T> {
     /**
      * Factory method for failure.
      *
-     * @param e
-     * @param <U>
+     * @param e throwable to create the failed Try with
+     * @param <U> Type
      * @return a new Failure
      */
 
@@ -154,8 +154,8 @@ public abstract class Try<T> {
     /**
      * Factory method for success.
      *
-     * @param x
-     * @param <U>
+     * @param x value to create the successful Try with
+     * @param <U> Type
      * @return a new Success
      */
     public static <U> Try<U> successful(U x) {
