@@ -13,22 +13,16 @@ Import into your project:
 SBT
 ---
 
-    "com.jason-goodwin" % "better-monads_2.10" % "0.0.1"
+    "com.jason-goodwin" % "better-monads" % "0.0.1"
 
 Maven
 -----
 
     <dependency>
 	    <groupId>com.jason-goodwin</groupId>
-	    <artifactId>better-monads_2.10</artifactId>
+	    <artifactId>better-monads</artifactId>
 	    <version>0.1.0</version>
     </dependency>
-
-Note on Published Artifact
---------------------------
-
-Currently published version had problems with javadoc so the project was published as a scala project.
-It currently has a scala version amendment in the name (_2.10). This will be fixed in future versions.
 
 Try
 ===
