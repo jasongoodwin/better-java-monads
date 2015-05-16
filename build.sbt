@@ -4,6 +4,8 @@ organization := "com.jason-goodwin"
 
 libraryDependencies += "junit" % "junit" % "4.11" % "test"
 
+crossPaths := false
+
 publishMavenStyle := true
 
 publishTo := {
