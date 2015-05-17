@@ -5,6 +5,8 @@ I can't help but feel there were some important omissions in the Java8 library.
 Stream and Optional are great, but we need to get unclear effects like Exceptions out of the code too.
 To make a much more readable code base, I'll try to supply some monads to fill in the gaps - especially Try.
 
+Another omission is a CompletableFuture.sequence method, turning a List<CompletableFuture<T>> into a CompletableFuture<List<T>>
+
 Usage
 =====
 
@@ -13,7 +15,7 @@ Import into your project:
 SBT
 ---
 
-    "com.jason-goodwin" % "better-monads" % "0.1.0"
+    "com.jason-goodwin" % "better-monads" % "0.2.0"
 
 Maven
 -----
@@ -21,7 +23,7 @@ Maven
     <dependency>
 	    <groupId>com.jason-goodwin</groupId>
 	    <artifactId>better-monads</artifactId>
-	    <version>0.1.0</version>
+	    <version>0.2.0</version>
     </dependency>
 
 Try
@@ -45,5 +47,26 @@ The Try api is meant to be similar to the Optional type so has the same function
 - orElse(x) will return the success value of the Try in success case or the value x in failure case.
 - orElseTry(f) will return the success value of the Try in success case or a new Try(f) in the failure case.
 - toOptional() will return Optional of success value of Try (if not null), otherwise it will return an empty Optional
+
+Futures
+=======
+There is no sequence method in the Java8 library - you'll find the function Futures.sequence which will convert a List<CompletableFuture<T>> into a CompletableFuture<List<T>>. This is handy to have around and is a common use case.
+
+Usage
+-----
+Simply call Futures.sequence on a List<CompletableFuture<T>> to get back a single future with the list of your items.
+
+    List<Integer> list = IntStream.range(0, 100).boxed().collect(Collectors.toList());
+        int size = list.size();
+        List<CompletableFuture<Integer>> futures = list
+                .stream()
+                .map(x -> CompletableFuture.supplyAsync(() -> x))
+                .collect(Collectors.toList());
+
+    CompletableFuture<List<Integer>> futureList = Futures.sequence(futures);
+
+
+Tests
+=====
 
 See the tests for examples of all functionality.
