@@ -41,7 +41,4 @@ pomExtra := (
     </developer>
   </developers>)
 
-credentials += Credentials("Sonatype Nexus Repository Manager",
-                           "oss.sonatype.org",
-                           "user",
-                           "pass")
+credentials += Credentials(Path.userHome / ".nexuscredentials")
