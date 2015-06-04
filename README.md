@@ -42,8 +42,8 @@ The Try api is meant to be similar to the Optional type so has the same function
 - recover((t) -> x) will return the success value of the Try in the success case or the value x in the failure case. Exposes the exception.
 - recoverWith((t) -> f(x)) will return the success value of the Try in the success case or a new try of f(x) in the failure case. Exposes the exception.
 - filter((x) -> isTrue(x)) - If Success, returns the same Success if the predicate succeeds, otherwise, returns a Failure with type NoSuchElementException.
-- onSuccess((x) -> f(x)) execute some code on success - requires no return value.
-- onFailure((x) -> f(x)) execute some code on failure - requires no return value.
+- onSuccess((x) -> f(x)) execute some code on success - takes Consumer (eg requires no return value).
+- onFailure((x) -> f(x)) execute some code on failure - takes Consumer (eg requires no return value).
 - orElse(x) will return the success value of the Try in success case or the value x in failure case.
 - orElseTry(f) will return the success value of the Try in success case or a new Try(f) in the failure case.
 - toOptional() will return Optional of success value of Try (if not null), otherwise it will return an empty Optional
