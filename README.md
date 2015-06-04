@@ -15,7 +15,7 @@ Import into your project:
 SBT
 ---
 
-    "com.jason-goodwin" % "better-monads" % "0.2.0"
+    "com.jason-goodwin" % "better-monads" % "0.2.1"
 
 Maven
 -----
@@ -23,7 +23,7 @@ Maven
     <dependency>
 	    <groupId>com.jason-goodwin</groupId>
 	    <artifactId>better-monads</artifactId>
-	    <version>0.2.0</version>
+	    <version>0.2.1</version>
     </dependency>
 
 Try
@@ -50,7 +50,7 @@ The Try api is meant to be similar to the Optional type so has the same function
 
 Futures
 =======
-There is no sequence method in the Java8 library - you'll find the function Futures.sequence which will convert a List<CompletableFuture<T>> into a CompletableFuture<List<T>>. This is handy to have around and is a common use case.
+There is no sequence method in the Java8 library so I've provided one. You'll find the function Futures.sequence which will convert a List<CompletableFuture<T>> into a CompletableFuture<List<T>>. This is useful in the common use case of processing all of the elements of a list concurrently.
 
 Usage
 -----
