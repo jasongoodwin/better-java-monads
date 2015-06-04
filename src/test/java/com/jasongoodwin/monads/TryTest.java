@@ -183,5 +183,46 @@ public class TryTest {
 
         assertTrue(opt1.isPresent());
     }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void itShouldThrowExceptionFromTryConsumerOnSuccessIfSuccess() throws Throwable {
+        Try<String> t = Try.ofFailable(() -> "hey");
+      
+        t.onSuccess(s -> {
+          throw new IllegalArgumentException("Should be thrown.");
+        });
+    }
+    
+    @Test
+    public void itShouldNotThrowExceptionFromTryConsumerOnSuccessIfFailure() throws Throwable {
+        Try<String> t = Try.ofFailable(() -> {
+            throw new IllegalArgumentException("Expected exception");
+        });
+      
+        t.onSuccess(s -> {
+          throw new IllegalArgumentException("Should NOT be thrown.");
+        });
+    }
+    
+    @Test
+    public void itShouldNotThrowExceptionFromTryConsumerOnFailureIfSuccess() throws Throwable {
+        Try<String> t = Try.ofFailable(() -> "hey");
+      
+        t.onFailure(s -> {
+          throw new IllegalArgumentException("Should NOT be thrown.");
+        });
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void itShouldThrowExceptionFromTryConsumerOnFailureIfFailure() throws Throwable {
+        Try<String> t = Try.ofFailable(() -> {
+            throw new IllegalArgumentException("Expected exception");
+        });
+      
+        t.onFailure(s -> {
+            throw new IllegalArgumentException("Should be thrown.");
+        });
+    }
+    
 }
 

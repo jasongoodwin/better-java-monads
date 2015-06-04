@@ -115,16 +115,18 @@ public abstract class Try<T> {
      * Performs the provided action, when successful
      * @param action action to run
      * @return new composed Try
+     * @throws E if the action throws an exception
      */
-    public abstract Try<T> onSuccess(Consumer<T> action);
+    public abstract <E extends Throwable> Try<T> onSuccess(TryConsumer<T, E> action) throws E;
 
     /**
      * Performs the provided action, when failed
      * @param action action to run
      * @return new composed Try
+     * @throws E if the action throws an exception
      */
-    public abstract Try<T> onFailure(Consumer<Throwable> action);
-
+    public abstract <E extends Throwable> Try<T> onFailure(TryConsumer<Throwable, E> action) throws E;
+    
     /**
      * If a Try is a Success and the predicate holds true, the Success is passed further.
      * Otherwise (Failure or predicate doesn't hold), pass Failure.
@@ -224,9 +226,9 @@ class Success<T> extends Try<T> {
     }
 
     @Override
-    public Try<T> onSuccess(Consumer<T> action) {
-        action.accept(value);
-        return this;
+    public <E extends Throwable> Try<T> onSuccess(TryConsumer<T, E> action) throws E {
+      action.accept(value);
+      return this;
     }
 
     @Override
@@ -246,8 +248,8 @@ class Success<T> extends Try<T> {
     }
 
     @Override
-    public Try<T> onFailure(Consumer<Throwable> action) {
-        return this;
+    public <E extends Throwable> Try<T> onFailure(TryConsumer<Throwable, E> action) {
+      return this;
     }
 }
 
@@ -309,10 +311,10 @@ class Failure<T> extends Try<T> {
     }
 
     @Override
-    public Try<T> onSuccess(Consumer<T> action) {
-        return this;
+    public <E extends Throwable> Try<T> onSuccess(TryConsumer<T, E> action) {
+      return this;
     }
-
+    
     @Override
     public Try<T> filter(Predicate<T> pred) {
         return this;
@@ -323,9 +325,9 @@ class Failure<T> extends Try<T> {
         return Optional.empty();
     }
    
-    @Override 
-    public Try<T> onFailure(Consumer<Throwable> action) {
-        action.accept(e);
-        return this;
+    @Override
+    public <E extends Throwable> Try<T> onFailure(TryConsumer<Throwable, E> action) throws E {
+      action.accept(e);
+      return this;
     }
 }
