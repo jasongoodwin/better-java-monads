@@ -3,6 +3,9 @@ better-java8-monads
 
 I can't help but feel there were some important omissions in the Java8 library. This library attempts to fill in some of those short-comings.
 
+Feature Overview
+----------------
+
 Try - Optional exists to express nulls in types, but there is no way to express success/failure in types. Try to the rescue! The Try type is very similar to the Try in Scala's standard lib.
 
 CompletableFuture.sequence - If you have a list of futures, there is no obvious way to get a future of a list. This will come in handy!
