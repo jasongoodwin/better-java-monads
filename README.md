@@ -53,11 +53,11 @@ The Try api is meant to be similar to the Optional type so has the same function
 
 Futures
 =======
-There is no sequence method in the Java8 library so I've provided one. You'll find the function Futures.sequence which will convert a List<CompletableFuture<T>> into a CompletableFuture<List<T>>. This is useful in the common use case of processing all of the elements of a list concurrently.
+There is no sequence method in the Java8 library so I've provided one. You'll find the function Futures.sequence which will convert a `List<CompletableFuture<T>>` into a `CompletableFuture<List<T>>`. This is useful in the common use case of processing all of the elements of a list concurrently.
 
 Usage
 -----
-Simply call Futures.sequence on a List<CompletableFuture<T>> to get back a single future with the list of your items.
+Simply call Futures.sequence on a `List<CompletableFuture<T>>` to get back a single future with the list of your items.
 
     List<Integer> list = IntStream.range(0, 100).boxed().collect(Collectors.toList());
         int size = list.size();
