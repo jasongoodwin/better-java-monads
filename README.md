@@ -41,8 +41,8 @@ Usage
 -----
 
 The Try api is meant to be similar to the Optional type so has the same functions.
-- get() returns held value or throws cause
-- getUnchecked() returns held value or throws a cause wrapped in a RuntimeException
+- get() returns the held value or throws the thrown exception
+- getUnchecked() returns the held value or throws the thrown exception wrapped in a RuntimeException instance
 - map(x) maps the success value x to a new value and type or otherwise passes the Failure forward.
 - flatMap((x) -> f(x)) maps the success value x to a new Try of f(x).
 - recover((t) -> x) will return the success value of the Try in the success case or the value x in the failure case. Exposes the exception.
