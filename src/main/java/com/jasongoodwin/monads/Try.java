@@ -3,7 +3,6 @@ package com.jasongoodwin.monads;
 import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 /**
  * Monadic Try type.
@@ -24,8 +23,7 @@ public abstract class Try<T> {
         Objects.requireNonNull(f);
 
         try {
-            U y = f.get();
-            return Try.successful(y);
+            return Try.successful(f.get());
         } catch (Throwable t) {
             return Try.failure(t);
         }
@@ -100,12 +98,19 @@ public abstract class Try<T> {
     public abstract Try<T> orElseTry(TrySupplier<T> f);
 
     /**
-     * Gets the value on Success or throws the cause of the failure.
+     * Gets the value T on Success or throws the cause of the failure.
      *
-     * @return
+     * @return T
      * @throws Throwable
      */
     public abstract T get() throws Throwable;
+
+    /**
+     * Gets the value T on Success or throws the cause of the failure wrapped into a RuntimeException
+     * @return T
+     * @throws RuntimeException
+     */
+    public abstract T getUnchecked();
 
     public abstract boolean isSuccess();
 
@@ -131,7 +136,7 @@ public abstract class Try<T> {
      * @return a new Success
      */
     public static <U> Try<U> successful(U x) {
-        return new Success<U>(x);
+        return new Success<>(x);
     }
 }
 
@@ -181,6 +186,11 @@ class Success<T> extends Try<T> {
     }
 
     @Override
+    public T getUnchecked() {
+        return value;
+    }
+
+    @Override
     public <U> Try<U> map(TryMapFunction<? super T, ? extends U> f) {
         Objects.requireNonNull(f);
         try {
@@ -199,8 +209,6 @@ class Success<T> extends Try<T> {
     public Try<T> onFailure(Consumer<Throwable> f) {
         return this;
     }
-
-
 }
 
 
@@ -220,7 +228,7 @@ class Failure<T> extends Try<T> {
     @Override
     public <U> Try<U> flatMap(TryMapFunction<? super T, Try<U>> f) {
         Objects.requireNonNull(f);
-        return Try.<U>failure(e);
+        return Try.failure(e);
     }
 
     @Override
@@ -256,6 +264,11 @@ class Failure<T> extends Try<T> {
     }
 
     @Override
+    public T getUnchecked() {
+        throw new RuntimeException(e);
+    }
+
+    @Override
     public boolean isSuccess() {
         return false;
     }
@@ -265,6 +278,4 @@ class Failure<T> extends Try<T> {
         f.accept(e);
         return this;
     }
-
-
 }
