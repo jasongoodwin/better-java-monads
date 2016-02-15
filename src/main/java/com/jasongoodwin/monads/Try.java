@@ -3,7 +3,6 @@ package com.jasongoodwin.monads;
 import java.util.NoSuchElementException;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
@@ -100,6 +99,15 @@ public abstract class Try<T> {
      * @return new composed Try
      */
     public abstract Try<T> orElseTry(TrySupplier<T> f);
+
+    /**
+     * Gets the value on Success or throws a checked exception.
+     *
+     * @return new composed Try
+     * @throws Throwable produced by the supplier function argument
+     */
+
+    public abstract <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X;
 
     /**
      * Gets the value on Success or throws the cause of the failure.
@@ -206,6 +214,11 @@ class Success<T> extends Try<T> {
     }
 
     @Override
+    public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+        return value;
+    }
+
+    @Override
     public T get() throws Throwable {
         return value;
     }
@@ -298,6 +311,11 @@ class Failure<T> extends Try<T> {
     public Try<T> orElseTry(TrySupplier<T> f) {
         Objects.requireNonNull(f);
         return Try.ofFailable(f);
+    }
+
+    @Override
+    public <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X {
+        throw exceptionSupplier.get();
     }
 
     @Override

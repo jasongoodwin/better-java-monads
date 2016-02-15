@@ -223,6 +223,28 @@ public class TryTest {
             throw new IllegalArgumentException("Should be thrown.");
         });
     }
-    
+
+    @Test(expected = IllegalArgumentException.class)
+    public void itShouldThrowNewExceptionWhenInvokingOrElseThrowOnFailure() throws Throwable {
+        Try<String> t = Try.ofFailable(() -> {
+            throw new Exception("Oops");
+        });
+
+        t.<IllegalArgumentException>orElseThrow(() -> {
+            throw new IllegalArgumentException("Should be thrown.");
+        });
+    }
+
+    public void itShouldNotThrowNewExceptionWhenInvokingOrElseThrowOnSuccess() throws Throwable {
+        Try<String> t = Try.ofFailable(() -> "Ok");
+
+        String result = t.<IllegalArgumentException>orElseThrow(() -> {
+            throw new IllegalArgumentException("Should be thrown.");
+        });
+
+        assertEquals(result, "Ok");
+    }
+
+
 }
 
