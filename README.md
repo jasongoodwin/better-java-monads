@@ -18,7 +18,7 @@ Import into your project:
 SBT
 ---
 
-    "com.jason-goodwin" % "better-monads" % "0.2.1"
+    "com.jason-goodwin" % "better-monads" % "0.3.0"
 
 Maven
 -----
@@ -49,6 +49,7 @@ The Try api is meant to be similar to the Optional type so has the same function
 - onFailure((x) -> f(x)) execute some code on failure - takes Consumer (eg requires no return value).
 - orElse(x) will return the success value of the Try in success case or the value x in failure case.
 - orElseTry(f) will return the success value of the Try in success case or a new Try(f) in the failure case.
+- orElseThrow(() -> throw new T) gets result or on failure will throw checked exception of type T
 - toOptional() will return Optional of success value of Try (if not null), otherwise it will return an empty Optional
 
 Futures
