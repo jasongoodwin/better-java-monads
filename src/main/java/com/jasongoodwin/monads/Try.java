@@ -101,9 +101,9 @@ public abstract class Try<T> {
     public abstract Try<T> orElseTry(TrySupplier<T> f);
 
     /**
-     * Gets the value on Success or throws a checked exception.
+     * Gets the value T on Success or throws the cause of the failure.
      *
-     * @return new composed Try
+     * @return T
      * @throws Throwable produced by the supplier function argument
      */
 
