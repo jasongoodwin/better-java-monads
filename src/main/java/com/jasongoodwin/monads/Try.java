@@ -101,21 +101,28 @@ public abstract class Try<T> {
     public abstract Try<T> orElseTry(TrySupplier<T> f);
 
     /**
-     * Gets the value on Success or throws a checked exception.
+     * Gets the value T on Success or throws the cause of the failure.
      *
-     * @return new composed Try
+     * @return T
      * @throws Throwable produced by the supplier function argument
      */
 
     public abstract <X extends Throwable> T orElseThrow(Supplier<? extends X> exceptionSupplier) throws X;
 
     /**
-     * Gets the value on Success or throws the cause of the failure.
+     * Gets the value T on Success or throws the cause of the failure.
      *
-     * @return new composed Try
+     * @return T
      * @throws Throwable
      */
     public abstract T get() throws Throwable;
+
+    /**
+     * Gets the value T on Success or throws the cause of the failure wrapped into a RuntimeException
+     * @return T
+     * @throws RuntimeException
+     */
+    public abstract T getUnchecked();
 
     public abstract boolean isSuccess();
 
@@ -134,7 +141,7 @@ public abstract class Try<T> {
      * @throws E if the action throws an exception
      */
     public abstract <E extends Throwable> Try<T> onFailure(TryConsumer<Throwable, E> action) throws E;
-    
+
     /**
      * If a Try is a Success and the predicate holds true, the Success is passed further.
      * Otherwise (Failure or predicate doesn't hold), pass Failure.
@@ -224,6 +231,11 @@ class Success<T> extends Try<T> {
     }
 
     @Override
+    public T getUnchecked() {
+        return value;
+    }
+
+    @Override
     public <U> Try<U> map(TryMapFunction<? super T, ? extends U> f) {
         Objects.requireNonNull(f);
         try {
@@ -283,7 +295,7 @@ class Failure<T> extends Try<T> {
     @Override
     public <U> Try<U> flatMap(TryMapFunction<? super T, Try<U>> f) {
         Objects.requireNonNull(f);
-        return Try.<U>failure(e);
+        return Try.failure(e);
     }
 
     @Override
@@ -324,6 +336,11 @@ class Failure<T> extends Try<T> {
     }
 
     @Override
+    public T getUnchecked() {
+        throw new RuntimeException(e);
+    }
+
+    @Override
     public boolean isSuccess() {
         return false;
     }
@@ -332,7 +349,7 @@ class Failure<T> extends Try<T> {
     public <E extends Throwable> Try<T> onSuccess(TryConsumer<T, E> action) {
       return this;
     }
-    
+
     @Override
     public Try<T> filter(Predicate<T> pred) {
         return this;
@@ -342,7 +359,7 @@ class Failure<T> extends Try<T> {
     public Optional<T> toOptional() {
         return Optional.empty();
     }
-   
+
     @Override
     public <E extends Throwable> Try<T> onFailure(TryConsumer<Throwable, E> action) throws E {
       action.accept(e);

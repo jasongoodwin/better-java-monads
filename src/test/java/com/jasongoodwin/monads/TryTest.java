@@ -116,6 +116,21 @@ public class TryTest {
         assertEquals("jude", t.get());
     }
 
+    @Test(expected = RuntimeException.class)
+    public void itShouldGetAndThrowUncheckedException() throws Throwable {
+        Try.<String>ofFailable(() -> {
+            throw new Exception();
+        }).getUnchecked();
+
+    }
+
+    @Test
+    public void itShouldGetValue() throws Throwable {
+        final String result = Try.<String>ofFailable(() -> "test").getUnchecked();
+
+        assertEquals("test", result);
+    }
+
     @Test
     public void itShouldReturnRecoverValueWhenRecoveringOnFailure() {
         String t = Try.ofFailable(() -> "hey")
