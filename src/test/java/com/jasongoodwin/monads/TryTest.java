@@ -250,6 +250,20 @@ public class TryTest {
         });
     }
 
+    @Test
+    public void itShouldCreateSuccessFromPopulatedOptional() throws Throwable {
+        Try<String> t = Try.ofOptional(Optional.of("foobar"), new IllegalArgumentException("Missing Value"));
+        assertTrue(t.isSuccess());
+        assertEquals(t.get(), "foobar");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void itShouldCreateFailureFromEmptyOptional() throws Throwable {
+        Try<String> t = Try.ofOptional(Optional.empty(), new IllegalArgumentException("Missing Value"));
+
+        t.get();
+    }
+
     public void itShouldNotThrowNewExceptionWhenInvokingOrElseThrowOnSuccess() throws Throwable {
         Try<String> t = Try.ofFailable(() -> "Ok");
 

@@ -32,6 +32,18 @@ public abstract class Try<T> {
         }
     }
 
+    public static <U> Try<U> ofOptional(Optional<U> op, Throwable e) {
+        if(op.isPresent()) {
+            return new Success<>(op.get());
+        } else {
+            return new Failure<>(e);
+        }
+    }
+
+    public static <U> Try<U> ofOptional(Optional<U> op) {
+        return ofOptional(op, new IllegalArgumentException("Missing Value"));
+    }
+
     /**
      * Transform success or pass on failure.
      * Takes an optional type parameter of the new type.
