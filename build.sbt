@@ -7,6 +7,17 @@ libraryDependencies ++= Seq(
   "junit" % "junit" % "4.11" % "test"
 )
 
+lazy val thisProject = (project in file ("."))
+  .enablePlugins(SbtOsgi)
+
+osgiSettings
+
+OsgiKeys.bundleSymbolicName := "com.jasongoodwin.monads"
+
+OsgiKeys.exportPackage := Seq("com.jasongoodwin.monads")
+
+OsgiKeys.privatePackage := Seq.empty
+
 crossPaths := false
 
 publishMavenStyle := true
