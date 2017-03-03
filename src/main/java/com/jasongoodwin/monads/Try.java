@@ -143,6 +143,14 @@ public abstract class Try<T> {
     public abstract <E extends Throwable> Try<T> onFailure(TryConsumer<Throwable, E> action) throws E;
 
     /**
+     * When the clazz failure type happens, that exception is thrown
+     * @param clazz the expected exception class
+     * @return new composed Try
+     * @throws E if the failure type is the on provided
+     */
+    public abstract <E extends Throwable> Try<T> raise(Class<E> clazz) throws E;
+
+    /**
      * If a Try is a Success and the predicate holds true, the Success is passed further.
      * Otherwise (Failure or predicate doesn't hold), pass Failure.
      * @param pred predicate applied to the value held by Try
@@ -276,6 +284,11 @@ class Success<T> extends Try<T> {
     public <E extends Throwable> Try<T> onFailure(TryConsumer<Throwable, E> action) {
       return this;
     }
+
+    @Override
+    public <E extends Throwable> Try<T> raise(Class<E> clazz) throws E {
+      return this;
+    }
 }
 
 
@@ -365,4 +378,14 @@ class Failure<T> extends Try<T> {
       action.accept(e);
       return this;
     }
+
+    @Override
+    public <E extends Throwable> Try<T> raise(Class<E> clazz) throws E {
+        return onFailure( t -> {
+            if (clazz.isAssignableFrom(t.getClass())) {
+                throw (E) t;
+            }
+        } );
+    }
+
 }

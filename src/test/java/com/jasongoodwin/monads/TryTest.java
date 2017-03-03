@@ -250,6 +250,23 @@ public class TryTest {
         });
     }
 
+    @Test( expected = RaiseException.class )
+    public void itShouldThrowCheckedExceptionOnRaiseOnFailure() throws Exception {
+        Try< String > t = Try.ofFailable( () -> {
+            throw new RaiseException( "Oops" );
+        } );
+
+        t.raise( RaiseException.class );
+    }
+
+    @Test
+    public void itShouldNotThrowCheckedExceptionOnRaiseOnSuccess() throws Throwable {
+        Try<String> t = Try.successful("success");
+        t.raise( RaiseException.class );
+
+        assertEquals( t.get(), "success" );
+    }
+
     public void itShouldNotThrowNewExceptionWhenInvokingOrElseThrowOnSuccess() throws Throwable {
         Try<String> t = Try.ofFailable(() -> "Ok");
 
