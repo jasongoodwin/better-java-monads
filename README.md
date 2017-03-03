@@ -49,6 +49,7 @@ The Try api is meant to be similar to the Optional type so has the same function
 - filter((x) -> isTrue(x)) - If Success, returns the same Success if the predicate succeeds, otherwise, returns a Failure with type NoSuchElementException.
 - onSuccess((x) -> f(x)) execute some code on success - takes Consumer (eg requires no return value).
 - onFailure((x) -> f(x)) execute some code on failure - takes Consumer (eg requires no return value).
+- raise(x) -> will throw an exception of type x when it happens
 - orElse(x) will return the success value of the Try in success case or the value x in failure case.
 - orElseTry(f) will return the success value of the Try in success case or a new Try(f) in the failure case.
 - orElseThrow(() -> throw new T) gets result or on failure will throw checked exception of type T
