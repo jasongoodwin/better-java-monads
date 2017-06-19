@@ -4,7 +4,7 @@ organization := "com.jason-goodwin"
 
 libraryDependencies ++= Seq(
   "com.novocode" % "junit-interface" % "0.11" % "test",
-  "junit" % "junit" % "4.11" % "test"
+  "junit" % "junit" % "4.12" % "test"
 )
 
 crossPaths := false
