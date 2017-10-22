@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/EduardoGR/better-java-monads.svg)](https://travis-ci.org/EduardoGR/better-java-monads)
+
 better-java8-monads
 ==================
 
