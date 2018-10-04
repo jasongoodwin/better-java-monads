@@ -1,9 +1,7 @@
 package com.jasongoodwin.monads;
 
-import org.junit.Test;
-
 import java.util.Optional;
-
+import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class TryTest {
@@ -121,7 +119,13 @@ public class TryTest {
         Try.<String>ofFailable(() -> {
             throw new Exception();
         }).getUnchecked();
+    }
 
+    @Test(expected = IllegalStateException.class)
+    public void itShouldGetAndThrowOriginalExceptionIfUnchecked() throws Throwable {
+        Try.<String>ofFailable(() -> {
+            throw new IllegalStateException();
+        }).getUnchecked();
     }
 
     @Test

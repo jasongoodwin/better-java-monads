@@ -337,7 +337,11 @@ class Failure<T> extends Try<T> {
 
     @Override
     public T getUnchecked() {
-        throw new RuntimeException(e);
+        if(e instanceof RuntimeException) {
+            throw (RuntimeException) e;
+        } else {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
