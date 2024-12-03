@@ -1,6 +1,9 @@
 better-java8-monads
 ==================
 
+This library was built immediately after Java8 became GA to help pull up effects into types. 
+There are some other libraries mentioned w/ this project on Stack Overflow: https://stackoverflow.com/questions/27787772/try-monad-in-java-8
+
 I can't help but feel there were some important omissions in the Java8 library. This library attempts to fill in some of those short-comings.
 
 Feature Overview
