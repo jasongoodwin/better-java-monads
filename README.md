@@ -19,7 +19,7 @@ Import into your project:
 SBT
 ---
 
-    "com.jason-goodwin" % "better-monads" % "0.4.0"
+    "com.jason-goodwin" % "better-monads" % "0.4.1"
 
 Maven
 -----
@@ -27,7 +27,7 @@ Maven
     <dependency>
 	    <groupId>com.jason-goodwin</groupId>
 	    <artifactId>better-monads</artifactId>
-	    <version>0.4.0</version>
+	    <version>0.4.1</version>
     </dependency>
 
 Try
